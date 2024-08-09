@@ -13,8 +13,8 @@ const Dashboard = () => {
 	const navigate = useNavigate();
 	const [inputs,setInputs] = useState({
 		income:0,
-		category:"None",
-		description:"None"
+		category:"",
+		description:""
 	});
 	const inputHandler = (e)=>{
 		setInputs({...inputs,[e.target.name]:e.target.value});
@@ -48,6 +48,7 @@ const Dashboard = () => {
 
   return (
 	<div>
+		<br /><br /><br /><br />
 		<Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
 		<Paper elevation={3} sx={{ p: 3 }}>
 		<Typography variant="h3" sx={{ color: 'black', textAlign: 'center', fontSize: '170%', fontWeight: 'bold', fontStyle: 'italic' }}>

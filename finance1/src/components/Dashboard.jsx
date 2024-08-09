@@ -63,6 +63,7 @@ const Dashboard = () => {
 			})
 			.then(response => {
 				refreshDashboard();
+				alert("Record deleted!");
 			})
 			.catch(err => {
 				alert(err.response.data);
@@ -96,14 +97,14 @@ const Dashboard = () => {
 		<Typography variant="h3" sx={{ color: 'black', textAlign: 'center', fontSize: '170%', fontWeight: 'bold', fontStyle: 'italic' }}>
 		{name} - DASHBOARD
 		</Typography>
-		<Typography mt={3} variant="h5" sx={{ color: 'grey', fontWeight: 'bold', fontFamily: 'Times New Roman' }}>
+		<Typography mt={3} variant="h5" sx={{ color: 'grey', fontWeight: 'bold', fontFamily: 'Times New Roman', textAlign:'center' }}>
 		Income: ₹{total.income} &nbsp;&nbsp;&nbsp; Balance: ₹{total.balance} &nbsp;&nbsp;&nbsp; Spent: ₹{total.spent}
 		</Typography>
 		<Box sx={{ mt: 3 }}>
 			<Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold', textAlign: 'center', fontFamily: 'Times New Roman', mb: 2 }}>
 			Transactions - {data.length} (Credit:{total.credits}, Debit:{total.debits})
 			</Typography>
-			<Box sx={{ mt: 3, mb: 3 }}>
+			<Box sx={{ mt: 3, mb: 3 }} style={{textAlign:'center'}}>
 				<Button
 				variant="contained"
 				sx={{
