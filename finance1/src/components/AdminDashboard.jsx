@@ -1,5 +1,5 @@
 // adminDashboard.jsx
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
@@ -9,6 +9,8 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import BlockRoundedIcon from '@mui/icons-material/BlockOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
+import MailIcon from '@mui/icons-material/Mail';
+import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 const AdminDashboard = () => {
@@ -39,20 +41,23 @@ const AdminDashboard = () => {
 		)
 	};
 	
-	const deleteUser = (id)=>{
-		axios.delete("http://localhost:3000/api/admin/deleteUser/" + id,{
-			headers: {
-				"Authorization": `Bearer ${Cookies.get("session")}`
-			}
-		}).then(
-			(res)=>{
-				loadData();
-			}
-		).catch(
-			(err)=>{
-				console.error(err);
-			}
-		)
+	const deleteUser = (id, username)=>{
+		if (confirm("Do you want to delete user '" + username + "'?")) {
+			axios.delete("http://localhost:3000/api/admin/deleteUser/" + id,{
+				headers: {
+					"Authorization": `Bearer ${Cookies.get("session")}`
+				}
+			}).then(
+				(res)=>{
+					loadData();
+					alert("User '" + username + "' deleted!")
+				}
+			).catch(
+				(err)=>{
+					console.error(err);
+				}
+			)
+		}
 	};
 
 	function BlockButton(id,status) {
@@ -123,16 +128,21 @@ const AdminDashboard = () => {
 				ADMIN DASHBOARD
 			</Typography>
 			<br /><br />
-			<Typography variant='h4'>Users: {output.length}</Typography>
+			<Typography variant='h4' style={{textAlign:'center'}}>Users: {output.length}</Typography>
 			<br />
-			<Button variant='contained' color='success' onClick={()=>{
-				loadData();
-			}}>Refresh</Button>
+			<Box style={{textAlign:'center'}}>
+				<Button variant='contained' color='success' onClick={()=>{
+					loadData();
+				}}>Refresh</Button>
+			</Box>
+			<br /><br />
 			<TableContainer>
-				<Table>
+				<Table style={{background:'#ffffff'}} sx={{borderRadius:'25px'}}>
 					<TableHead>
 						<TableRow>
 							<TableCell><Typography variant='h6'><PersonIcon/> USERNAME</Typography></TableCell>
+							<TableCell><Typography variant='h6'><MailIcon/> EMAIL</Typography></TableCell>
+							<TableCell><Typography variant='h6'><MailIcon/> PHONE</Typography></TableCell>
 							<TableCell><Typography variant='h6'><LoginIcon/> LAST LOGIN</Typography></TableCell>
 							<TableCell><Typography variant='h6'><ManageAccountsIcon/> MANAGE ACCOUNTS</Typography></TableCell>
 						</TableRow>
@@ -142,6 +152,8 @@ const AdminDashboard = () => {
 							return (
 								<TableRow key={i}>
 									<TableCell><Typography variant='h7'>{val.username}</Typography></TableCell>
+									<TableCell><Typography variant='h7'>{val.email}</Typography></TableCell>
+									<TableCell><Typography variant='h7'>{val.phoneNumber}</Typography></TableCell>
 									<TableCell><Typography variant='h7'>{val.lastlogin}</Typography></TableCell>
 									<TableCell>
 										<Button color='primary' variant='contained' onClick={()=>{
@@ -149,7 +161,7 @@ const AdminDashboard = () => {
 										}}>Dashboard</Button>&nbsp;&nbsp;
 										{BlockButton(val._id,val.blocked)}&nbsp;&nbsp;
 										<Button color='error' variant='contained' onClick={()=>{
-											deleteUser(val._id);
+											deleteUser(val._id, val.username);
 										}}><DeleteRoundedIcon/></Button>
 									</TableCell>
 								</TableRow>
